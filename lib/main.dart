@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:send_notification/pages/login_page.dart';
 
 void main() {
   runApp(const SendNotificationsApp());
@@ -15,21 +16,21 @@ class SendNotificationsApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LoginPage(),
+      home: const HomePage(),
     );
   }
 }
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   // final String title;
 
   @override
-  State<LoginPage> createState() => _MyHomePageState();
+  State<HomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<LoginPage> {
+class _MyHomePageState extends State<HomePage> {
   // int _counter = 0;
 
   // void _incrementCounter() {
@@ -40,9 +41,6 @@ class _MyHomePageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-      child: Text('This is the Login Page'),
-    ));
+    return const Scaffold(body: LoginPage());
   }
 }
