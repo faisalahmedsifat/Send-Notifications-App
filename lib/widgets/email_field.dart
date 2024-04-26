@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 
 class EmailField extends StatelessWidget {
-  const EmailField({
-    super.key,
-  });
+  final ValueChanged<String> onChanged;
+
+  EmailField({
+    Key? key,
+    required this.onChanged,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.all(8.0),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
       child: TextField(
         decoration: InputDecoration(
           border: OutlineInputBorder(),
           labelText: 'Email',
         ),
+        onChanged: onChanged,
       ),
     );
   }

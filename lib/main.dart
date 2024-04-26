@@ -1,9 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:send_notification/api/firebase_messaging_service.dart';
 import 'package:send_notification/firebase_options.dart';
-import 'package:send_notification/pages/login_page.dart';
+import 'package:send_notification/screens/login_page.dart';
+import 'package:send_notification/screens/home_view.dart'; // Import your HomePage
 
-main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -12,7 +15,7 @@ main() async {
 }
 
 class SendNotificationsApp extends StatelessWidget {
-  const SendNotificationsApp({super.key});
+  const SendNotificationsApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -22,31 +25,36 @@ class SendNotificationsApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomePage(),
+      home: InitializerWidget(),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  // final String title;
-
+class InitializerWidget extends StatefulWidget {
   @override
-  State<HomePage> createState() => _MyHomePageState();
+  _InitializerWidgetState createState() => _InitializerWidgetState();
 }
 
-class _MyHomePageState extends State<HomePage> {
-  // int _counter = 0;
+class _InitializerWidgetState extends State<InitializerWidget> {
+  FirebaseAuth? _auth;
 
-  // void _incrementCounter() {
-  //   setState(() {
-  //     // _counter++;
-  //   });
-  // }
+  @override
+  void initState() {
+    super.initState();
+    _auth = FirebaseAuth.instance;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(body: LoginPage());
+    return StreamBuilder<User?>(
+      stream: _auth!.authStateChanges(),
+      builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
+        if (snapshot.connectionState == ConnectionState.active) {
+          print(snapshot.data);
+          return snapshot.data != null ? HomeView(email: snapshot.data!.email!) : LoginPage();
+        }
+        return CircularProgressIndicator();
+      },
+    );
   }
 }
